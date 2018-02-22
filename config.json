@@ -1,11 +1,11 @@
 {
-  "region": "us-east-1",
-  "kinesisVideoStreamName": "appVideoStream-videoFaceRek",
+  "region": "eu-west-1",
+  "kinesisVideoStreamName": "rekognition-test-stream",
   "kinesisDataStreamName": "appDataStream-videoFaceRek",
   "kinesisFaceCountStreamName": "appDataStream-faceCount",
   "streamProcessor": "appStreamProcessor-videoFaceRek",
   "snsTopicName": "appSNS-videoFaceRek",
-  "collectionId": "appCol-videoFaceRek",
+  "collectionId": "rekognition_collection",
   "iamRole": "appRole-videoFaceRek",
   "iamPolicy": "appPolicy-videoFaceRek",
   "bucketName": "apps3-videofacerek"

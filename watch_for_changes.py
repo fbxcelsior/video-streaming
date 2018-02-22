@@ -19,6 +19,9 @@ with open('config.json') as json_data_file:
 region = data['region']
 kinesisVideoStreamName = data['kinesisVideoStreamName']
 
+print 'region: ' + region
+print 'kinesisVideoStreamName: ' + kinesisVideoStreamName
+
 class MyHandler(PatternMatchingEventHandler):
     patterns = ["*.mkv", "*.mp4"]
 
@@ -33,7 +36,7 @@ class MyHandler(PatternMatchingEventHandler):
         """
 
         if event.event_type == 'modified':
-            # print 'modified: ' + event.src_path
+            print 'modified: ' + event.src_path
             # put into the queue
             q.put(event.src_path)
 
@@ -47,16 +50,20 @@ def loop_send(q):
     try:
         while True:
             if not q.empty():
-                # print "upload file: " + q.get()
+                #print "upload file: " + q.get()
                 fileName = q.get()
                 if os.path.isfile(fileName):
+                    #print "is file: " + fileName
                     subprocess.Popen(['./putMkvMedia.sh', accessKey, secretKey, region, kinesisVideoStreamName, fileName])
+                #else:
+                    #print "here"
     except KeyboardInterrupt:
         return
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    outDirectory = './outputStream/'
+    outDirectory = '/Users/filipe/Work/tools/aws/python/video-streaming/outputStream'
+    #print "creating dir"
     if not os.path.exists(outDirectory):
         os.makedirs(outDirectory)
     observer = Observer()
@@ -64,10 +71,12 @@ if __name__ == '__main__':
     observer.start()
     p1 = Process(target=loop_send, args=(q,))
     p1.start()
+    #print "started process"
 
     try:
         while True:
             time.sleep(1)
+            #print "sleep"
     except KeyboardInterrupt:
         observer.stop()
 
